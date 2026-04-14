@@ -1,5 +1,14 @@
 # 3D Renderer - Mesh Editor
 
+![C++17](https://img.shields.io/badge/C%2B%2B-17-blue?logo=cplusplus)
+![SDL2](https://img.shields.io/badge/SDL2-2.30-orange?logo=sdl)
+![CMake](https://img.shields.io/badge/CMake-3.16+-green?logo=cmake)
+![Platform](https://img.shields.io/badge/Platform-Windows%20%7C%20Linux-lightgrey)
+![Renderer](https://img.shields.io/badge/Renderer-Software%20(No%20GPU)-purple)
+![Raytracing](https://img.shields.io/badge/Raytracing-Path%20Tracer-red)
+![License](https://img.shields.io/badge/License-MIT-yellow)
+![Built From Scratch](https://img.shields.io/badge/Built-From%20Scratch-ff69b4)
+
 A real-time 3D software renderer and mesh editor built from scratch in C++17 with SDL2. Features Blinn-Phong shading, progressive path tracing with atmospheric sky, procedural textures, and Blender-style mesh editing — all running on the CPU without a GPU.
 
 ## Mascot
