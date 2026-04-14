@@ -1,0 +1,53 @@
+# Quick Pyramid Example
+
+Copy and paste this into `src/app/main_app_blueprint.cpp` around line 165:
+
+## BEFORE (Cube - lines 165-172):
+```cpp
+    // Cube vertices
+    Vec3 cube[8] = {{-0.5,-0.5,-0.5},{0.5,-0.5,-0.5},{0.5,0.5,-0.5},{-0.5,0.5,-0.5},
+                    {-0.5,-0.5,0.5},{0.5,-0.5,0.5},{0.5,0.5,0.5},{-0.5,0.5,0.5}};
+    int faces[12][3] = {{0,1,2},{0,2,3},{4,6,5},{4,7,6},{0,4,5},{0,5,1},
+                        {2,6,7},{2,7,3},{0,7,4},{0,3,7},{1,5,6},{1,6,2}};
+
+    for (int f = 0; f < 12; f++) {
+```
+
+## AFTER (Pyramid):
+```cpp
+    // Pyramid vertices
+    Vec3 pyramid[4] = {
+        { 0.0,  0.7,  0.0},  // Top apex
+        {-0.5, -0.5, -0.5},  // Base corner 1
+        { 0.5, -0.5, -0.5},  // Base corner 2
+        { 0.0, -0.5,  0.5}   // Base corner 3
+    };
+
+    // Pyramid faces
+    int faces[4][3] = {
+        {0, 2, 1},  // Right face
+        {0, 3, 2},  // Back face
+        {0, 1, 3},  // Left face
+        {1, 2, 3}   // Base
+    };
+
+    for (int f = 0; f < 4; f++) {  // Changed from 12 to 4
+```
+
+## Also change line 178 from:
+```cpp
+        wld[v] = cube[faces[f][v]];
+```
+
+## To:
+```cpp
+        wld[v] = pyramid[faces[f][v]];
+```
+
+Then rebuild:
+```bash
+bash build_blueprint.sh
+./renderer_blueprint.exe
+```
+
+You'll see a pyramid instead of a cube!

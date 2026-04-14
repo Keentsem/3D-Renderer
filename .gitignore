@@ -1,0 +1,35 @@
+# Build artifacts
+build/
+obj/
+*.o
+*.obj
+*.exe
+*.exp
+*.lib
+*.pdb
+*.ilk
+
+# CMake
+CMakeFiles/
+CMakeCache.txt
+cmake_install.cmake
+Makefile.cmake
+
+# IDE
+.vscode/
+.idea/
+*.swp
+.DS_Store
+
+# Output images (regenerated)
+output/*.tga
+test_output.tga
+
+# Third-party archives
+*.tar.gz
+*.7z
+*.zip
+external/SDL2-*/
+
+# Runtime DLLs are tracked, but .a/.lib we regenerate
+*.a
