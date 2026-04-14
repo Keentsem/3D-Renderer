@@ -1,145 +1,79 @@
-# 3D Renderer - From Scratch
+# 3D Renderer - Mesh Editor
 
-A complete 3D renderer implementation in C++, supporting both rasterization and ray tracing.
+A real-time 3D software renderer and mesh editor built from scratch in C++17 with SDL2. Features Blinn-Phong shading, progressive path tracing with atmospheric sky, procedural textures, and Blender-style mesh editing — all running on the CPU without a GPU.
 
-## Project Status
+## Mascot
 
-**Phase 1: Project Foundations** ✓ Complete
+![Mascot](images/Robot.png)
 
-- Directory structure created
-- Vector math library (Vec2, Vec3, Vec4)
-- Matrix math library (Mat3, Mat4)
-- TGA image I/O with RLE compression
-- Build system (CMake & Makefile)
+## Renderer Example
 
-## Requirements
+![Renderer Example](images/Example.png)
 
-### C++ Compiler ✓ INSTALLED
-MinGW-w64 (GCC 14.2.0) is installed at `C:\mingw64\mingw64\bin\`
+## Features
 
-The build scripts automatically add this to your PATH.
+- **Render Modes**: Wireframe, Flat, Gouraud (smooth Phong), and Path-Traced Raytracing
+- **Mesh Editing**: Vertex/face selection, click-and-drag vertices, extrude, subdivide, inset
+- **Primitives**: Cube, Octahedron, Tetrahedron, Ghost mascot
+- **OBJ Import**: Drag and drop `.obj` files onto the window to load any model
+- **Raytracing**: Progressive path tracer with BVH acceleration, Nishita atmospheric sky, shadow rays, Fresnel glass, metallic reflections
+- **Materials**: Blinn-Phong BRDF, Lambertian diffuse, Metal, Dielectric (glass)
+- **Lighting**: 3-point directional lighting, point lights, shadow rays
+- **UI**: Animated splash screen, 4 color themes (Amber, Cyan, Magenta, Pro), pixel-art mascot, glassmorphism panels with depth effects
+
+## Controls
+
+| Key | Action |
+|-----|--------|
+| `1-3` | Switch primitive (Object mode) / render mode (Edit mode) |
+| `4` | Ghost mascot primitive |
+| `5` | Raytrace render mode (Edit mode) |
+| `Tab` | Toggle Object / Edit mode |
+| `V` / `F` | Vertex / Face select mode |
+| `E` | Extrude selected face |
+| `,` | Subdivide mesh |
+| `Right-click drag` | Orbit camera |
+| `Scroll` | Zoom in/out |
+| `Left-click drag` | Drag vertices (Edit mode) |
+| `T` | Cycle color theme |
+| `L` | Toggle light rotation |
+| `Space` | Toggle auto-spin |
+| `R` | Reset camera |
+| `G` | Toggle grid |
+| `O` | Toggle scanlines |
+| `Drag .obj file` | Load custom 3D model |
 
 ## Building
 
-### Easiest Method
+Requires CMake 3.16+, a C++17 compiler (MinGW-w64 or GCC), and SDL2.
+
 ```bash
-./build.sh      # Build the project
-./renderer.exe  # Run the renderer
+./build.sh          # configure + build
+./build.sh clean    # wipe build directory
 ```
 
-Or use the batch files in Windows Command Prompt:
-```bash
-build.bat       # Build the project
-run.bat         # Run the renderer
-```
-
-### Manual Build (if needed)
-```bash
-# Make sure MinGW is in your PATH first:
-set PATH=C:\mingw64\mingw64\bin;%PATH%
-
-# Then compile:
-g++ -std=c++17 -O3 -Wall -Isrc -c src/main.cpp -o src/main.o
-g++ -std=c++17 -O3 -Wall -Isrc -c src/image/tgaimage.cpp -o src/image/tgaimage.o
-g++ -std=c++17 -O3 -o renderer.exe src/main.o src/image/tgaimage.o
-```
-
-### Using Make (if available)
-```bash
-make            # Build the project
-make run        # Build and run
-make clean      # Clean build artifacts
-```
-
-## Testing Phase 1
-
-After building, run:
-```bash
-./renderer  # or renderer.exe on Windows
-```
-
-This will:
-1. Test vector operations (dot product, cross product, normalization)
-2. Test matrix operations (multiplication, identity)
-3. Generate `output/test.tga` with a red cross and colored corners
-
-Expected output:
-```
-=== Phase 1: Testing Project Foundations ===
-
---- Testing Vectors ---
-Dot product a * b: 32
-Cross product a x b: (-3, 6, -3)
-Normalized a: (0.267261, 0.534522, 0.801784)
-Length of normalized a: 1.0
-
---- Testing Matrices ---
-Identity * v: (1, 2, 3, 1)
-Scaled v: (2, 6, 12, 1)
-
---- Testing TGA Image ---
-✓ Image saved successfully to output/test.tga!
-  Image size: 100x100
-
-=== Phase 1 Complete ===
-All foundation components are working correctly.
-Ready to proceed to Phase 2: Line Drawing.
-```
+The binary will be at `build/renderer_blueprint.exe`.
 
 ## Project Structure
 
 ```
-3d_renderer/
+3DRenderer/
 ├── src/
-│   ├── core/           # vec.h, mat.h (math foundations)
-│   ├── image/          # tgaimage.h, tgaimage.cpp (image I/O)
-│   ├── rasterizer/     # line.h, triangle.h, zbuffer.h, shader.h (Phase 2+)
-│   ├── raytracer/      # raytracer.h (Phase 4+)
-│   ├── scene/          # model.h (Phase 2+)
-│   ├── transform/      # transform.h (Phase 3+)
-│   └── main.cpp
-├── obj/                # 3D model files (.obj)
-├── textures/           # Texture images (.tga)
-├── output/             # Rendered output images
+│   ├── core/           # vec.h, mat.h — vector and matrix math
+│   ├── image/          # tgaimage.h/cpp — TGA framebuffer
+│   ├── rasterizer/     # phong_shader.h, triangle.h, zbuffer.h
+│   ├── raytracer/      # ray.h, renderer.h, material.h, sky.h, bvh.h
+│   ├── scene/          # editable_mesh.h — mesh primitives + OBJ loader
+│   ├── transform/      # transform.h — projection and viewport matrices
+│   └── app/            # main_app_blueprint.cpp, app_blueprint.h, ui_effects.h
+├── assets/             # ghost.obj model
+├── images/             # Robot.png, Example.png
+├── external/           # SDL2 (bundled)
 ├── CMakeLists.txt
-├── Makefile
+├── build.sh
 └── README.md
 ```
 
-## Key Features Implemented (Phase 1)
-
-### Vector Mathematics (`src/core/vec.h`)
-- Generic n-dimensional vectors
-- Specialized Vec2, Vec3, Vec4
-- Dot product, cross product
-- Scalar operations (multiply, divide)
-- Vector operations (add, subtract)
-- Normalization
-- Homogeneous coordinate conversions
-
-### Matrix Mathematics (`src/core/mat.h`)
-- Generic m×n matrices
-- Matrix-vector multiplication
-- Matrix-matrix multiplication
-- Transpose
-- 4×4 inverse (for normal transformations)
-- Identity matrix generation
-
-### TGA Image I/O (`src/image/tgaimage.h`, `tgaimage.cpp`)
-- Read/write TGA files
-- RLE compression support
-- Horizontal/vertical flipping
-- GRAYSCALE, RGB, RGBA formats
-- Predefined colors (WHITE, BLACK, RED, GREEN, BLUE)
-
-## Next Steps
-
-Proceed to **Phase 2: Line Drawing** to implement:
-- Bresenham's line algorithm
-- Wireframe rendering
-- OBJ file loading
-- Your first 3D wireframe model
-
 ## License
 
-Educational project - feel free to use and modify.
+MIT
